@@ -162,3 +162,56 @@ ggplot(data_multilevel, aes(x = Region, y = Coefficient, fill = Education)) +
   theme_minimal() +
   scale_fill_brewer(palette = "Set2")
 
+
+
+
+# Main Regression
+# Function to format p-values exactly as displayed in R terminal
+format_pvalue <- function(pval) {
+  format.pval(pval, digits = 3, eps = .Machine$double.eps)
+}
+
+# Run Main Regression (LPM)
+lpm_model <- lm(HPVACHAD ~ EDUC_GROUP + AGE_GROUP + SEX + MARSTAT_DUMMY + RACENEW_GROUP + REGION_GROUP, 
+                data = data_clean)
+
+# Print full regression results in R terminal
+cat("----- Main Regression (LPM) Summary -----\n")
+print(summary(lpm_model))
+
+# Extract and format results
+lpm_results <- broom::tidy(lpm_model) %>%
+  mutate(
+    Estimate = round(estimate, 3),
+    `Std. Error` = round(std.error, 3),
+    `t value` = round(statistic, 3),
+    `Pr(>|t|)` = format_pvalue(p.value),  # Ensure exact p-value format
+    Significance = case_when(
+      p.value < 0.01 ~ "***",
+      p.value < 0.05 ~ "**",
+      p.value < 0.1 ~ "*",
+      TRUE ~ ""
+    )
+  ) %>%
+  select(term, Estimate, `Std. Error`, `t value`, `Pr(>|t|)`, Significance)
+
+# Export Main Regression Results to Word
+doc <- read_docx() %>%
+  body_add_par("Table 1. Main Regression Results", style = "heading 1") %>%
+  body_add_flextable(flextable(lpm_results) %>%
+    theme_booktabs() %>%
+    set_table_properties(width = 1.0, layout = "autofit") %>%
+    fontsize(size = 10, part = "all") %>%
+    width(j = 1, width = 2.5) %>%  
+    width(j = 2:6, width = 1.5))
+
+print(doc, target = "Main_Regression_Results.docx")
+
+
+# Multicollinearity
+# Calculate VIF for the linear regression model 
+vif_results <- vif(lpm_model) 
+# Print VIF results 
+print("Variance Inflation Factor (VIF) Results:") 
+print(vif_results)
+
