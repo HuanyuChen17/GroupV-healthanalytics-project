@@ -73,8 +73,49 @@ data_clean$EDUC_GROUP <- factor(data_clean$EDUC_GROUP, levels = c("No High Schoo
 data_clean$RACENEW_GROUP <- factor(data_clean$RACENEW_GROUP, levels = c("White", "Black", "Asian", "Other"))
 data_clean$REGION_GROUP <- factor(data_clean$REGION_GROUP, levels = c("Northeast", "Midwest", "South", "West"))
 
+# Descriptive Statistics
+descriptive_stats <- function(data, var) {
+  stats <- data %>%
+    group_by(!!sym(var)) %>%
+    summarise(n = n(), Percentage = round(n() / nrow(data) * 100, 3)) %>%
+    mutate(Variable = paste(var, "-", as.character(!!sym(var)))) %>%
+    select(Variable, n, Percentage) %>%
+    mutate(across(everything(), as.character))
+  return(stats)
+}
 
+age_overall_stats <- data_clean %>%
+  summarise(n = n(), Mean = round(mean(AGE, na.rm = TRUE), 3), SD = round(sd(AGE, na.rm = TRUE), 3), Min = min(AGE, na.rm = TRUE), Max = max(AGE, na.rm = TRUE)) %>%
+  mutate(Variable = "AGE - Overall") %>%
+  select(Variable, n, Mean, SD, Min, Max) %>%
+  mutate(across(everything(), as.character))
 
+hpv_stats <- descriptive_stats(data_clean, "HPVACHAD")
+age_group_stats <- descriptive_stats(data_clean, "AGE_GROUP")
+educ_stats <- descriptive_stats(data_clean, "EDUC_GROUP")
+sex_stats <- descriptive_stats(data_clean, "SEX")
+marstat_stats <- descriptive_stats(data_clean, "MARSTAT_DUMMY")
+race_stats <- descriptive_stats(data_clean, "RACENEW_GROUP")
+region_stats <- descriptive_stats(data_clean, "REGION_GROUP")
+
+categorical_table <- bind_rows(hpv_stats, age_group_stats, educ_stats, sex_stats, marstat_stats, race_stats, region_stats)
+
+# **Export Descriptive Statistics**
+table_categorical <- flextable(categorical_table) %>%
+  theme_booktabs() %>%
+  autofit() %>%
+  set_caption("Table 1. Descriptive Statistics (Categorical Variables)")
+
+table_age_overall <- flextable(age_overall_stats) %>%
+  theme_booktabs() %>%
+  autofit() %>%
+  set_caption("Table 2. Descriptive Statistics (AGE - Overall)")
+
+doc <- read_docx() %>%
+  body_add_flextable(table_categorical) %>%
+  body_add_flextable(table_age_overall)
+
+print(doc, target = "Descriptive_Statistics.docx")
 
 
 # Visualization: Bar chart of Education Level vs HPV Vaccination Rate**
