@@ -46,7 +46,7 @@ The project is divided into several components:
 ## Code Instructions
 - **1.	Data Cleaning**
 This step preprocesses the raw data by:
--	Recoding variables (e.g., education, marital status, age grouping).
+-	Recoding variables.
 -	Filtering for relevant observations (e.g., year = 2022).
 -	Ensuring consistency in categorical variables.
 
