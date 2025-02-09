@@ -215,3 +215,65 @@ vif_results <- vif(lpm_model)
 print("Variance Inflation Factor (VIF) Results:") 
 print(vif_results)
 
+
+# Robustness Check
+# Function to format p-values exactly as displayed in R terminal
+format_pvalue <- function(pval) {
+  format.pval(pval, digits = 3, eps = .Machine$double.eps)
+}
+
+# Run Logit and Probit Regressions
+logit_model <- glm(HPVACHAD ~ EDUC_GROUP + AGE_GROUP + SEX + MARSTAT_DUMMY + RACENEW_GROUP + REGION_GROUP, 
+                   family = binomial(link = "logit"), data = data_clean)
+
+probit_model <- glm(HPVACHAD ~ EDUC_GROUP + AGE_GROUP + SEX + MARSTAT_DUMMY + RACENEW_GROUP + REGION_GROUP, 
+                    family = binomial(link = "probit"), data = data_clean)
+
+# Print full regression results in R terminal
+cat("\n----- Logit Regression Results -----\n")
+print(summary(logit_model))
+
+cat("\n----- Probit Regression Results -----\n")
+print(summary(probit_model))
+
+# Function to extract and format regression results
+extract_results <- function(model, model_name) {
+  broom::tidy(model) %>%
+    mutate(
+      Estimate = round(estimate, 3),
+      `Std. Error` = round(std.error, 3),
+      `t value` = round(statistic, 3),
+      `Pr(>|t|)` = format_pvalue(p.value),  
+      Significance = case_when(
+        p.value < 0.01 ~ "***",
+        p.value < 0.05 ~ "**",
+        p.value < 0.1 ~ "*",
+        TRUE ~ ""
+      ),
+      Model = model_name
+    ) %>%
+    select(Model, term, Estimate, `Std. Error`, `t value`, `Pr(>|t|)`, Significance) %>%
+    rename(Variable = term)
+}
+
+# Organize Logit and Probit Results
+logit_results <- extract_results(logit_model, "Logit")
+probit_results <- extract_results(probit_model, "Probit")
+
+robustness_results <- bind_rows(logit_results, probit_results)
+
+# Ensure Model column appears only once for Logit & Probit
+robustness_results$Model <- ifelse(duplicated(robustness_results$Model), "", robustness_results$Model)
+
+# Export Robustness Check Results to Word
+doc <- read_docx() %>%
+  body_add_par("Table 3. Robustness Check: Logit & Probit Models", style = "heading 1") %>%
+  body_add_flextable(flextable(robustness_results) %>%
+    theme_booktabs() %>%
+    set_table_properties(width = 1.0, layout = "autofit") %>%
+    fontsize(size = 10, part = "all") %>%
+    width(j = 1, width = 2) %>%
+    width(j = 2:7, width = 1.5))
+
+print(doc, target = "Robustness_Regression.docx")
+
