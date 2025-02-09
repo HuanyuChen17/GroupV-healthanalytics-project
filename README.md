@@ -68,8 +68,8 @@ This step preprocesses the raw data by:
 
 
 - **5.	Heterogeneity Analysis and visualization**
-•	Filter data for each region (Northeast, Midwest, South, West).
-•	Run regressions within each region.
+- *Filter data for each region (Northeast, Midwest, South, West).*
+- *Run regressions within each region.*
 •	Extract coefficients and standard errors for education levels.
 •	Create a box chart showing regional differences in vaccination rates by education level.
 •	Export results to Word (Heterogeneity_Regression.docx).
