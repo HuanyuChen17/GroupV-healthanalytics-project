@@ -36,12 +36,50 @@ Files
 
 ## Workflow Overview
 The project is divided into several components:
--**1.	Data Cleaning**
--**2.	Descriptive Statistics**
--**3.	Visualization**
--**4.	Main Regression Analysis**
--**5.	Heterogeneity Analysis and visualization**
--**6.	Robustness Checks**
+- **1.	Data Cleaning**
+- **2.	Descriptive Statistics**
+- **3.	Visualization**
+- **4.	Main Regression Analysis**
+- **5.	Heterogeneity Analysis and visualization**
+- **6.	Robustness Checks**
+
+## Code Instructions
+- **1.	Data Cleaning**
+This step preprocesses the raw data by:
+•	Recoding variables (e.g., education, marital status, age grouping).
+•	Filtering for relevant observations (e.g., year = 2022).
+•	Ensuring consistency in categorical variables.
+
+- **2.	Descriptive Statistics**
+•	Summarize categorical variables like education and vaccination rates.
+•	Summarize continuous variables like age.
+•	Export summary tables as a Word document (Descriptive_Statistics.docx).
+
+
+- **3.	Visualization**
+•	Group by education level and calculate the average vaccination rate.
+•	Create bar charts with ggplot2.
+
+
+- **4.	Main Regression Analysis**
+•	Run a linear probability model (LPM) with lm.
+•	Extract results and format them into a table.
+•	Export regression results to Word (Main_Regression_Results.docx).
+
+
+- **5.	Heterogeneity Analysis and visualization**
+•	Filter data for each region (Northeast, Midwest, South, West).
+•	Run regressions within each region.
+•	Extract coefficients and standard errors for education levels.
+•	Create a box chart showing regional differences in vaccination rates by education level.
+•	Export results to Word (Heterogeneity_Regression.docx).
+
+
+- **6.	Robustness Checks**
+•	Run glm for Logit and Probit models.
+•	Extract regression results and format them into tables.
+•	Export results to Word (Robustness_Regression.docx).
+
 
 
 
