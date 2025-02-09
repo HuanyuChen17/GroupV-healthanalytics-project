@@ -254,6 +254,21 @@ ggplot(data_multilevel, aes(x = Region, y = Coefficient, fill = Education)) +
   theme_minimal() +
   scale_fill_brewer(palette = "Set2")
 
+# Ensure each region appears only once in the Word output
+heterogeneity_results$Region <- ifelse(duplicated(heterogeneity_results$Region), "", heterogeneity_results$Region)
+
+# Export Heterogeneity Analysis Results to Word
+doc <- read_docx() %>%
+  body_add_par("Table 2. Heterogeneity Analysis by Region", style = "heading 1") %>%
+  body_add_flextable(flextable(heterogeneity_results) %>%
+    theme_booktabs() %>%
+    set_table_properties(width = 1.0, layout = "autofit") %>%
+    fontsize(size = 10, part = "all") %>%
+    width(j = 1, width = 2) %>%
+    width(j = 2:7, width = 1.5))
+
+print(doc, target = "Heterogeneity_Regression.docx")
+
 
 # Robustness Check
 # Function to format p-values exactly as displayed in R terminal
