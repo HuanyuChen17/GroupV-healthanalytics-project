@@ -24,14 +24,14 @@ REGION: Region of residence
 
 ## Description of how to run the code
 ## Prerequisites
-Software Requirements
-•	R (version 4.0.0 or later)
-•	RStudio 
-Required R Packages
+- **Software Requirements**
+R (version 4.0.0 or later)
+RStudio 
+- **Required R Packages**
 The following R packages are required to run the scripts. Install them using the command below:
 install.packages(c("dplyr", "ipumsr", "ggplot2", "car", "flextable", "officer", "RColorBrewer", "broom"))
 Files
-•	nhis_00004.xml: Metadata for the dataset.
-•	Corresponding microdata file: Contains the raw data.
+*nhis_00004.xml: Metadata for the dataset.*
+*Corresponding microdata file: Contains the raw data.*
 
 
