@@ -39,7 +39,7 @@ The project is divided into several components:
 - **2.	Descriptive Statistics**
 - **3.	Visualization**
 - **4.	Main Regression Analysis**
-- **5.	Heterogeneity Analysis and visualization**
+- **5.	Heterogeneity Analysis and Visualization**
 - **6.	Robustness Checks**
 
 ## Code Instructions
@@ -66,7 +66,7 @@ This step preprocesses the raw data by:
 -	Export regression results to Word (Main_Regression_Results.docx).
 
 
-- **5.	Heterogeneity Analysis and visualization**
+- **5.	Heterogeneity Analysis and Visualization**
 - Filter data for each region (Northeast, Midwest, South, West).
 - Run regressions within each region.
 - Extract coefficients and standard errors for education levels.
