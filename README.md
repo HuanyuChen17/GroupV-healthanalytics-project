@@ -23,4 +23,15 @@ REGION: Region of residence
 4.	Ensure you have both the XML file (nhis_00004.xml) and the microdata file in the same directory as the scripts.
 
 ## Description of how to run the code
-Here you should explain how someone could replicate the analysis in your report. If there are several code files, explain what each of them does.
+## Prerequisites
+Software Requirements
+•	R (version 4.0.0 or later)
+•	RStudio 
+Required R Packages
+The following R packages are required to run the scripts. Install them using the command below:
+install.packages(c("dplyr", "ipumsr", "ggplot2", "car", "flextable", "officer", "RColorBrewer", "broom"))
+Files
+•	nhis_00004.xml: Metadata for the dataset.
+•	Corresponding microdata file: Contains the raw data.
+
+
