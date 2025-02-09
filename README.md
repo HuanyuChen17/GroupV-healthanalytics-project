@@ -31,7 +31,19 @@ RStudio
 The following R packages are required to run the scripts. Install them using the command below:
 install.packages(c("dplyr", "ipumsr", "ggplot2", "car", "flextable", "officer", "RColorBrewer", "broom"))
 Files
-*nhis_00004.xml: Metadata for the dataset.*
-*Corresponding microdata file: Contains the raw data.*
+- **nhis_00004.xml: Metadata for the dataset.**
+- **Corresponding microdata file: Contains the raw data.**
+
+## Workflow Overview
+The project is divided into several components:
+-**1.	Data Cleaning**
+-**2.	Descriptive Statistics**
+-**3.	Visualization**
+-**4.	Main Regression Analysis**
+-**5.	Heterogeneity Analysis and visualization**
+-**6.	Robustness Checks**
+
+
+
 
 
