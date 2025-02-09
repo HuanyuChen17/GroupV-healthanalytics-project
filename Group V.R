@@ -100,7 +100,7 @@ region_stats <- descriptive_stats(data_clean, "REGION_GROUP")
 
 categorical_table <- bind_rows(hpv_stats, age_group_stats, educ_stats, sex_stats, marstat_stats, race_stats, region_stats)
 
-# **Export Descriptive Statistics**
+# Export Descriptive Statistics
 table_categorical <- flextable(categorical_table) %>%
   theme_booktabs() %>%
   autofit() %>%
@@ -185,6 +185,49 @@ vif_results <- vif(lpm_model)
 print("Variance Inflation Factor (VIF) Results:") 
 print(vif_results)
 
+# Heterogeneity Analysis
+# Function to format p-values exactly as displayed in R terminal
+format_pvalue <- function(pval) {
+  format.pval(pval, digits = 3, eps = .Machine$double.eps)
+}
+
+# Function to run regional regressions
+run_regression <- function(region) {
+  subset_data <- data_clean %>% filter(REGION_GROUP == region)
+  
+  model <- lm(HPVACHAD ~ EDUC_GROUP + AGE_GROUP + SEX + MARSTAT_DUMMY + RACENEW_GROUP, data = subset_data)
+  
+  # Print full regression results in R terminal
+  cat(paste0("\n----- Heterogeneity Analysis: ", region, " -----\n"))
+  print(summary(model))
+  
+  result <- broom::tidy(model) %>%
+    mutate(
+      Estimate = round(estimate, 3),
+      `Std. Error` = round(std.error, 3),
+      `t value` = round(statistic, 3),
+      `Pr(>|t|)` = format_pvalue(p.value),  # Ensure exact p-value format
+      Significance = case_when(
+        p.value < 0.01 ~ "***",
+        p.value < 0.05 ~ "**",
+        p.value < 0.1 ~ "*",
+        TRUE ~ ""
+      ),
+      Region = region
+    ) %>%
+    select(Region, term, Estimate, `Std. Error`, `t value`, `Pr(>|t|)`, Significance) %>%
+    rename(Variable = term)
+  
+  return(result)
+}
+
+# Run regressions for all regions
+heterogeneity_results <- bind_rows(
+  run_regression("Northeast"),
+  run_regression("Midwest"),
+  run_regression("South"),
+  run_regression("West")
+)
 
 # Visualization: Extract coefficients and standard errors for education levels
 data_multilevel <- heterogeneity_results %>%
