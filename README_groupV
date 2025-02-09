@@ -1,1 +1,3 @@
-
+#Group V README File
+##Project Overview
+This project explores the impact of educational attainment on HPV vaccination rates, with a focus on understanding how this relationship differs across various population groups and  regions. Utilizing data from the IPUMS NHIS 2022 dataset, the analysis employs descriptive statistics, regression models, heterogeneity analysis, robustness checks, and visualizations to provide a comprehensive examination of the factors influencing vaccination rates. Results are systematically documented and exported as Word reports for further review and interpretation. 
