@@ -157,9 +157,10 @@ lpm_results <- broom::tidy(lpm_model) %>%
     `t value` = round(statistic, 3),
     `Pr(>|t|)` = format_pvalue(p.value),  # Ensure exact p-value format
     Significance = case_when(
-      p.value < 0.01 ~ "***",
-      p.value < 0.05 ~ "**",
-      p.value < 0.1 ~ "*",
+        p.value < 0.001 ~ "***",  
+        p.value < 0.01 ~ "**",    
+        p.value < 0.05 ~ "*",     
+        p.value < 0.1 ~ ".", 
       TRUE ~ ""
     )
   ) %>%
@@ -208,9 +209,10 @@ run_regression <- function(region) {
       `t value` = round(statistic, 3),
       `Pr(>|t|)` = format_pvalue(p.value),  # Ensure exact p-value format
       Significance = case_when(
-        p.value < 0.01 ~ "***",
-        p.value < 0.05 ~ "**",
-        p.value < 0.1 ~ "*",
+        p.value < 0.001 ~ "***",  
+        p.value < 0.01 ~ "**",    
+        p.value < 0.05 ~ "*",     
+        p.value < 0.1 ~ ".", 
         TRUE ~ ""
       ),
       Region = region
@@ -299,9 +301,10 @@ extract_results <- function(model, model_name) {
       `t value` = round(statistic, 3),
       `Pr(>|t|)` = format_pvalue(p.value),  
       Significance = case_when(
-        p.value < 0.01 ~ "***",
-        p.value < 0.05 ~ "**",
-        p.value < 0.1 ~ "*",
+        p.value < 0.001 ~ "***",  
+        p.value < 0.01 ~ "**",    
+        p.value < 0.05 ~ "*",     
+        p.value < 0.1 ~ ".", 
         TRUE ~ ""
       ),
       Model = model_name
